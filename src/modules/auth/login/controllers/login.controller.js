@@ -22,15 +22,15 @@ router.post('/', async (req, res) => {
 
         // Validar la contraseña
         const isPasswordValid = await bcrypt.compare(pass, usuario.pass);
-        console.log('first', usuario.pass)
+
         if (!isPasswordValid) {
-            return res.status(401).json({ success: false, message: 'Credenciales inválidas1.' });
+            return res.status(401).json({ success: false, message: 'Credenciales inválidas.' });
         }
 
         const accessToken = jwt.sign(usuario.toJSON(), process.env.ACCESS_TOKEN, { expiresIn: '1h' });
-        res.status(200).json({ success: true, result: accessToken, message: 'login establecido con exito' });
+        res.status(200).json({ success: true, result: accessToken, message: 'Sesión establecido con exito' });
     } catch (error) {
-        res.status(400).json({ success: false, message: 'Credenciales invalidas3' });
+        res.status(400).json({ success: false, message: 'Credenciales invalidas' });
     }
 });
 

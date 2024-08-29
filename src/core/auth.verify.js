@@ -9,7 +9,9 @@ function authenticateToken(req, res, next) {
     }
 
     jwt.verify(token, process.env.ACCESS_TOKEN, (err, user) => {
-        if (err) return res.sendStatus(403);
+        if (err) {
+            return res.sendStatus(403).json({ success: false, message: 'Su sesión ha vencido' });
+        }
         req.user = user;
         next();
     });

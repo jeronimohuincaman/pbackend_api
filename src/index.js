@@ -1,5 +1,5 @@
 // Cargar variables de entorno
-require('dotenv').config();
+const config = require('./core/config');
 //Importacion de dependencias
 const express = require('express');
 const bodyParser = require('body-parser');

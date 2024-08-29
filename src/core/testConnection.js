@@ -1,12 +1,13 @@
 const { Sequelize } = require('sequelize');
+const config = require('./config');
 
 /**
  * Conexion con nuestra base de datos
  */
-const sequelize = new Sequelize('pbackend_api', 'root', 'root', {
-    host: 'localhost',
+const sequelize = new Sequelize(config.database, config.user, config.password, {
+    host: config.host,
     dialect: 'mysql',
-    port: 3306
+    port: config.port
 });
 
 /**

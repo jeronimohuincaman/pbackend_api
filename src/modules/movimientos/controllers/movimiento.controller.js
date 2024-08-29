@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const config = require('./../../../core/config');
+const jwt = require('jsonwebtoken');
 
 const Movimiento = require('../models/movimiento');
 
@@ -9,7 +11,8 @@ router.get('/', async (req, res) => {
     try {
         //Manejar caso de exito
         const movimientos = await Movimiento.findAll();
-        res.status(200).json({ success: true, result: movimientos, message: 'Movimientos obtenidos con exito' });
+        const accessToken = jwt.sign({ data: movimientos }, config.secretKey, { expiresIn: '1h' });
+        res.status(200).json({ success: true, result: movimientos, message: 'Movimientos obtenidos con exito', token: accessToken });
     } catch (error) {
         //Manejar caso de error
         res.status(400).json({ success: false, result: "Movimientos", message: 'Error al obtener Movimientos' });
@@ -32,7 +35,8 @@ router.post('/', async (req, res) => {
             monto: body.monto,
         })
 
-        res.status(201).json({ success: true, result: nuevoMovimiento, message: 'Movimiento creado con exito' });
+        const accessToken = jwt.sign({ data: nuevoMovimiento }, config.secretKey, { expiresIn: '1h' });
+        res.status(201).json({ success: true, result: nuevoMovimiento, message: 'Movimiento creado con exito', token: accessToken });
     } catch (error) {
         //Manejar caso de error
         res.status(400).json({ success: false, message: 'El cuerpo de la solicitud no puede estar vacío.' });
@@ -45,8 +49,11 @@ router.get('/:idmovimiento', async (req, res) => {
     try {
         //Manejar caso de exito
         const movimiento = await Movimiento.findByPk(idmovimiento);
-        res.status(200).json({ success: true, result: movimiento, message: 'Movimiento obtenido con exito' });
+
+        const accessToken = jwt.sign({ data: movimiento }, config.secretKey, { expiresIn: '1h' });
+        res.status(200).json({ success: true, result: movimiento, message: 'Movimiento obtenido con exito', token: accessToken });
     } catch (error) {
+        console.log(error)
         //Manejar caso de error
         res.status(400).json({ success: false, message: 'Error al obtener movimiento' });
     }
@@ -63,9 +70,11 @@ router.put('/:idmovimiento', async (req, res) => {
         if (!movimiento) {
             return res.status(404).json({ success: false, message: 'Movimiento no encontrado' });
         }
+
+        const accessToken = jwt.sign({ data: movimiento }, config.secretKey, { expiresIn: '1h' });
         //Encapsular datos recibidos
         const new_movimiento = await movimiento.update(body);
-        res.status(200).json({ success: true, result: new_movimiento, message: 'Movimiento actualizado con exito' });
+        res.status(200).json({ success: true, result: new_movimiento, message: 'Movimiento actualizado con exito', token: accessToken });
     } catch (error) {
         //Manejar caso de error
         res.status(400).json({ success: false, message: 'Error al actualizar el movimiento' });
@@ -83,7 +92,9 @@ router.delete('/:idmovimiento', async (req, res) => {
         }
         //Eliminamos registro
         await movimiento.destroy();
-        res.status(200).json({ success: true, result: movimiento, message: 'Movimiento eliminado con exito' });
+
+        const accessToken = jwt.sign({ data: movimiento }, config.secretKey, { expiresIn: '1h' });
+        res.status(200).json({ success: true, result: movimiento, message: 'Movimiento eliminado con exito', token: accessToken });
     } catch (error) {
         //Manejar caso de error
         res.status(400).json({ success: false, message: 'Error al eliminar el Movimiento' });

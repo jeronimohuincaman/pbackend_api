@@ -22,22 +22,35 @@
 
 |  | Parameter | Type     | Description                |
 |:-------- | :-------- | :------- | :------------------------- |
-| Header |  `Authorization: Bearear {{token}}` | `string` | **Required**. Your API key |
+| Header |  `Authorization: Bearer {{token}}` | `string` | **Required**. Your API key |
 | Body | `{"user": "granjero","pass":"12"}` | `JSON` | **Required**. Your API key |
 
 ### Listado de movimientos
 ```http
     GET localhost:3000/movimientos
 ```
+
+|  | Parameter | Type     | Description                |
+|:-------- | :-------- | :------- | :------------------------- |
+| Header |  `Authorization: Bearer {{token}}` | `string` | **Required**. Your API key |
+
 ### Obtener un solo movimiento
 ```http
     GET localhost:3000/movimientos/31c3b31d-75e1-4283-9c19-a7a71f5e5224
 ```
 
+|  | Parameter | Type     | Description                |
+|:-------- | :-------- | :------- | :------------------------- |
+| Header |  `Authorization: Bearear {{token}}` | `string` | **Required**. Your API key |
+
 ### Eliminar un movimiento
 ```http
     DELETE localhost:3000/movimientos/ac5eaef0-990e-4402-8346-7b7870dd8f45
 ```
+
+|  | Parameter | Type     | Description                |
+|:-------- | :-------- | :------- | :------------------------- |
+| Header |  `Authorization: Bearear {{token}}` | `string` | **Required**. Your API key |
 
 ### Crear un movimiento
 ```http

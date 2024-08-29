@@ -23,7 +23,6 @@
 |:-------- | :-------- | :------- | :------------------------- |
 | Header |  `Authorization: Bearear {{token}}` | `string` | **Required**. Your API key |
 | Body | `{"user": "granjero","pass":"12"}` | `JSON` | **Required**. Your API key |
-```
 
 ```http
     GET localhost:3000/movimientos

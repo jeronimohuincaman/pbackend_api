@@ -16,6 +16,7 @@ const authenticateToken = require('./core/auth.verify');
 const auth_route = require('./modules/auth/login/controllers/login.controller');
 const movimientos_route = require('./modules/movimientos/controllers/movimiento.controller');
 const tipo_de_movimientos_route = require('./modules/tipo_de_movimientos/controllers/tipo_de_movimiento.controller');
+const medios_de_pago_route = require('./modules/medios_de_pago/controllers/medios_de_pago.controller');
 
 //Mensaje de bienvenida
 app.get('/', (req, res) => {
@@ -26,6 +27,7 @@ app.get('/', (req, res) => {
 app.use('/login', auth_route);
 app.use('/movimientos', authenticateToken, movimientos_route);
 app.use('/tipo_de_movimientos', authenticateToken, tipo_de_movimientos_route);
+app.use('/medios_de_pago', authenticateToken, medios_de_pago_route);
 
 //Verificador
 app.listen(port, () => {

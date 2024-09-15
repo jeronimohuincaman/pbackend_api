@@ -6,9 +6,13 @@ class Movimiento extends Model { };
 //Definir estructura en sequelize. Si no existe la tabla, la crea.
 Movimiento.init({
     idmovimiento: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-        primaryKey: true
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false,
+        validate: {
+            min: 0 // Asegura que no haya valores negativos
+        }
     },
     fecha: {
         type: DataTypes.DATE,

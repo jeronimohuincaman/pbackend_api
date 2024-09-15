@@ -18,6 +18,9 @@ TipoDeMovimiento.init({
         type: DataTypes.STRING,
         allowNull: false
     }
-}, { sequelize, modelName: "TipoDeMovimiento" });
+}, {
+    sequelize, modelName: "TipoDeMovimiento",
+    tableName: "tipo_de_movimientos"
+});
 
 module.exports = TipoDeMovimiento;

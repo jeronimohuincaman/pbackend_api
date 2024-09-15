@@ -19,7 +19,10 @@ Usuario.init({
         type: DataTypes.STRING,
         allowNull: false
     }
-}, { sequelize, modelName: "Usuario" });
+}, {
+    sequelize, modelName: "Usuario",
+    tableName: "usuarios"
+});
 
 sequelize.sync();
 

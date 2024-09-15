@@ -34,6 +34,9 @@ Movimiento.init({
         type: DataTypes.FLOAT,
         allowNull: false
     },
-}, { sequelize, modelName: "Movimiento" });
+}, {
+    sequelize, modelName: "Movimiento",
+    tableName: "movimientos"
+});
 
 module.exports = Movimiento;

@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "start": "nodemon src/index.js",
-    "test": ""
+    "test": "set NODE_OPTIONS=--experimental-vm-modules NODE_ENV=test jest && npx jest --detectOpenHandles --runInBand"
   },
   "devDependencies": {
     "bcrypt": "^5.1.1",
@@ -25,5 +25,10 @@
   "dependencies": {
     "express-validator": "^7.2.0",
     "promise-mysql": "^5.2.0"
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "./jest.setup.js"
+    ]
   }
 }

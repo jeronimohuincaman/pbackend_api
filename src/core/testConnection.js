@@ -10,7 +10,8 @@ import config from './config.js';
 const sequelize = new Sequelize(config.database, config.user, config.password, {
     host: config.host,
     dialect: 'mysql',
-    port: config.port
+    port: config.port,
+    logging: process.env.NODE_ENV === 'test' ? false : console.log, // Desactivar en test
 });
 
 /**
@@ -19,11 +20,12 @@ const sequelize = new Sequelize(config.database, config.user, config.password, {
 async function testConnection() {
     try {
         await sequelize.authenticate();
-        console.log('Conexión a la base de datos establecida con éxito...');
+        // console.log('Conexión a la base de datos establecida con éxito...');
     } catch (error) {
         console.log('No se pudo realizar la conexión a la base de datos... Fíjate si levantaste MySQL');
     }
 }
+
 testConnection();
 
 // Exportar la conexión sequelize usando export default

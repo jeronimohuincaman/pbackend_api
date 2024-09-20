@@ -1,6 +1,10 @@
 {
+  "name": "pbackend_api",
+  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "start": "nodemon src/index.js"
+    "start": "nodemon src/index.js",
+    "test": ""
   },
   "devDependencies": {
     "bcrypt": "^5.1.1",
@@ -9,11 +13,13 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "jest": "^29.7.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "mysql2": "^3.11.0",
     "nodemon": "^3.1.4",
     "sequelize": "^6.37.3",
+    "supertest": "^7.0.0",
     "zod-validation-error": "^3.3.1"
   },
   "dependencies": {

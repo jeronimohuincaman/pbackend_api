@@ -1,8 +1,11 @@
-const { Sequelize } = require('sequelize');
-const config = require('./config');
+// Importar Sequelize usando import
+import { Sequelize } from 'sequelize';
+
+// Importar configuración de la base de datos
+import config from './config.js';
 
 /**
- * Conexion con nuestra base de datos
+ * Conexión con nuestra base de datos
  */
 const sequelize = new Sequelize(config.database, config.user, config.password, {
     host: config.host,
@@ -11,16 +14,17 @@ const sequelize = new Sequelize(config.database, config.user, config.password, {
 });
 
 /**
- * Verificamos la conexion con nuestra base de datos
+ * Verificamos la conexión con nuestra base de datos
  */
 async function testConnection() {
     try {
         await sequelize.authenticate();
-        console.log('Conexion a la base de datos establecida con exito...')
+        console.log('Conexión a la base de datos establecida con éxito...');
     } catch (error) {
-        console.log('No se pudo realizar la conexion a la base de datos... Fijate si levantaste MySQL')
+        console.log('No se pudo realizar la conexión a la base de datos... Fíjate si levantaste MySQL');
     }
 }
 testConnection();
 
-module.exports = sequelize;
+// Exportar la conexión sequelize usando export default
+export default sequelize;

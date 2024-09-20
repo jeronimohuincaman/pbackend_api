@@ -1,9 +1,10 @@
-const express = require('express');
-const router = express.Router();
-const config = require('./../../../core/config');
-const jwt = require('jsonwebtoken');
+import express from 'express';
+import config from './../../../core/config.js';
+import jwt from 'jsonwebtoken';
+import Fondo from '../models/fondo.js';
 
-const Fondo = require('../models/fondo');
+// Crear el router
+const router = express.Router();
 
 // Obtener registros
 router.get('/', async (req, res) => {
@@ -98,4 +99,5 @@ router.delete('/:idfondo', async (req, res) => {
     }
 });
 
-module.exports = router;
+// Exportar el router usando export default
+export default router;

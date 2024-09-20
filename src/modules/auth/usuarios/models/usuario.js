@@ -1,9 +1,13 @@
-const { Sequelize, DataTypes, Model } = require('sequelize');
-const sequelize = require('../../../../core/testConnection');
+// Importar Sequelize, DataTypes, Model usando import
+import { Sequelize, DataTypes, Model } from 'sequelize';
 
-class Usuario extends Model { };
+// Importar la conexión a la base de datos
+import sequelize from '../../../../core/testConnection.js';
 
-//Definir estructura en sequelize. Si no existe la tabla, la crea.
+// Definir la clase Usuario que extiende de Model
+class Usuario extends Model { }
+
+// Definir la estructura del modelo en Sequelize. Si no existe la tabla, la crea.
 Usuario.init({
     idusuario: {
         type: DataTypes.INTEGER,
@@ -20,10 +24,13 @@ Usuario.init({
         allowNull: false
     }
 }, {
-    sequelize, modelName: "Usuario",
-    tableName: "usuarios"
+    sequelize, // Conexión a la base de datos
+    modelName: "Usuario", // Nombre del modelo
+    tableName: "usuarios" // Nombre de la tabla
 });
 
+// Sincronizar el modelo con la base de datos
 sequelize.sync();
 
-module.exports = Usuario;
+// Exportar el modelo Usuario usando export default
+export default Usuario;

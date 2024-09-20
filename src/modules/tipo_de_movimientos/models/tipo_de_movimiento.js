@@ -1,9 +1,8 @@
-const { Sequelize, DataTypes, Model } = require('sequelize');
-const sequelize = require('../../../core/testConnection');
+import { Sequelize, DataTypes, Model } from 'sequelize';
+import sequelize from '../../../core/testConnection.js';
 
-class TipoDeMovimiento extends Model { };
+class TipoDeMovimiento extends Model { }
 
-//Definir estructura en sequelize. Si no existe la tabla, la crea.
 TipoDeMovimiento.init({
     idtipo: {
         type: DataTypes.INTEGER,
@@ -19,8 +18,9 @@ TipoDeMovimiento.init({
         allowNull: false
     }
 }, {
-    sequelize, modelName: "TipoDeMovimiento",
+    sequelize,
+    modelName: "TipoDeMovimiento",
     tableName: "tipo_de_movimientos"
 });
 
-module.exports = TipoDeMovimiento;
+export default TipoDeMovimiento;

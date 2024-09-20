@@ -1,9 +1,9 @@
-const express = require('express');
-const router = express.Router();
-const config = require('../../../core/config');
-const jwt = require('jsonwebtoken');
+import express from 'express';
+import jwt from 'jsonwebtoken';
+import config from '../../../core/config.js';
+import MedioDePago from '../models/medio_de_pago.js';
 
-const MedioDePago = require('../models/medio_de_pago');
+const router = express.Router();
 
 // Obtener registros
 router.get('/', async (req, res) => {
@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
         const accessToken = jwt.sign({ data: nuevoMedio }, config.secretKey, { expiresIn: '20m' });
         res.status(201).json({ success: true, result: nuevoMedio, message: 'Medio de pago creado con éxito', token: accessToken });
     } catch (error) {
-        console.log(error)
+        console.log(error);
         const accessToken = jwt.sign({ data: 'error' }, config.secretKey, { expiresIn: '20m' });
         res.status(400).json({ success: false, message: 'Error al crear el medio de pago', token: accessToken });
     }
@@ -96,4 +96,4 @@ router.delete('/:idmediopago', async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

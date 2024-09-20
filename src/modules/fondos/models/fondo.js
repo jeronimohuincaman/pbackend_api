@@ -1,8 +1,8 @@
-const { Sequelize, DataTypes, Model } = require('sequelize');
-const sequelize = require('../../../core/testConnection');
-const Origen = require('../../origenes/models/origen');  // Asegúrate de importar el modelo Origen
+import { Sequelize, DataTypes, Model } from 'sequelize';
+import sequelize from '../../../core/testConnection.js';
+import Origen from '../../origenes/models/origen.js'; // Asegúrate de importar el modelo Origen
 
-class Fondo extends Model { };
+class Fondo extends Model { }
 
 // Definir estructura en sequelize. Si no existe la tabla, la crea.
 Fondo.init({
@@ -48,4 +48,5 @@ Fondo.init({
     tableName: "fondos"
 });
 
-module.exports = Fondo;
+// Exportar el modelo usando export default
+export default Fondo;

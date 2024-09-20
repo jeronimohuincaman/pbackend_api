@@ -1,9 +1,9 @@
-const express = require('express');
-const router = express.Router();
-const config = require('./../../../core/config');
-const jwt = require('jsonwebtoken');
+import express from 'express';
+import jwt from 'jsonwebtoken';
+import config from '../../../core/config.js';
+import Origen from '../models/origen.js';
 
-const Origen = require('../models/origen');
+const router = express.Router();
 
 // Obtener todos los registros
 router.get('/', async (req, res) => {
@@ -79,7 +79,7 @@ router.delete('/:idorigen', async (req, res) => {
             return res.status(404).json({ success: false, message: 'Origen no encontrado', token: accessToken });
         }
         await origen.destroy();
-        const accessToken = jwt.sign({ data: 'exito' }, config.secretKey, { expiresIn: '20m' });
+        const accessToken = jwt.sign({ data: 'éxito' }, config.secretKey, { expiresIn: '20m' });
         res.status(200).json({ success: true, result: origen, message: 'Origen eliminado con éxito', token: accessToken });
     } catch (error) {
         const accessToken = jwt.sign({ data: 'error' }, config.secretKey, { expiresIn: '20m' });
@@ -87,4 +87,4 @@ router.delete('/:idorigen', async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

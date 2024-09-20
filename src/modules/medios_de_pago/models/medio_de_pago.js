@@ -1,7 +1,7 @@
-const { Sequelize, DataTypes, Model } = require('sequelize');
-const sequelize = require('../../../core/testConnection');
+import { Sequelize, DataTypes, Model } from 'sequelize';
+import sequelize from '../../../core/testConnection.js';
 
-class MedioDePago extends Model { };
+class MedioDePago extends Model {}
 
 // Definir estructura en sequelize. Si no existe la tabla, la crea.
 MedioDePago.init({
@@ -24,4 +24,5 @@ MedioDePago.init({
     tableName: "medios_de_pago" // Opcional: define el nombre exacto de la tabla
 });
 
-module.exports = MedioDePago;
+// Exportar el modelo usando export default
+export default MedioDePago;

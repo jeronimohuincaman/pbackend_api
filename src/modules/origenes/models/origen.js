@@ -1,7 +1,7 @@
-const { Sequelize, DataTypes, Model } = require('sequelize');
-const sequelize = require('../../../core/testConnection');
+import { Sequelize, DataTypes, Model } from 'sequelize';
+import sequelize from '../../../core/testConnection.js';
 
-class Origen extends Model { };
+class Origen extends Model { }
 
 Origen.init({
     idorigen: {
@@ -20,4 +20,4 @@ Origen.init({
     tableName: "origenes"
 });
 
-module.exports = Origen;
+export default Origen;

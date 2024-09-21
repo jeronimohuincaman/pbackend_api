@@ -13,7 +13,10 @@
     ```bash
         npm start
     ```
-
+5) Correr test
+    ```bash
+        npm test
+    ```
 
 ### Login
 ```http

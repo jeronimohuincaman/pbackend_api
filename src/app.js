@@ -9,6 +9,7 @@ dotenv.config();
 // Importar middlewares y controladores
 import authenticateToken from './core/auth.verify.js'; // Middleware de autenticación
 import authRouter from './modules/auth/login/controllers/login.controller.js'; // Controlador de autenticación
+import usuariosRoute from './modules/auth/usuarios/controllers/usuario.controller.js';
 import mediosDePagoRoute from './modules/medios_de_pago/controllers/medios_de_pago.controller.js';
 import movimientoRoute from './modules/movimientos/controllers/movimiento.controller.js';
 import tipoDeMovimientoRoute from './modules/tipo_de_movimientos/controllers/tipo_de_movimiento.controller.js';
@@ -34,6 +35,7 @@ app.use('/tipo_de_movimientos', authenticateToken, tipoDeMovimientoRoute);
 app.use('/medios_de_pago', authenticateToken, mediosDePagoRoute);
 app.use('/fondos', authenticateToken, fondosRoute);
 app.use('/origenes', authenticateToken, origenesRoute);
+app.use('/usuarios', authenticateToken, usuariosRoute);
 
 // Exportar la aplicación
 export default app;

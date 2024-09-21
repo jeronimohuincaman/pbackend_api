@@ -22,6 +22,14 @@ Usuario.init({
     pass: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    nombre: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    apellido: {
+        type: DataTypes.STRING,
+        allowNull: false
     }
 }, {
     sequelize, // Conexión a la base de datos

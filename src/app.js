@@ -15,6 +15,7 @@ import movimientoRoute from './modules/movimientos/controllers/movimiento.contro
 import tipoDeMovimientoRoute from './modules/tipo_de_movimientos/controllers/tipo_de_movimiento.controller.js';
 import fondosRoute from './modules/fondos/controllers/fondo.controller.js';
 import origenesRoute from './modules/origenes/controllers/origen.controller.js';
+import pagosRoute from './modules/pagos/controllers/pago.controller.js';
 
 // Crear instancia de la aplicación
 const app = express();
@@ -36,6 +37,7 @@ app.use('/medios_de_pago', authenticateToken, mediosDePagoRoute);
 app.use('/fondos', authenticateToken, fondosRoute);
 app.use('/origenes', authenticateToken, origenesRoute);
 app.use('/usuarios', authenticateToken, usuariosRoute);
+app.use('/pagos', authenticateToken, pagosRoute);
 
 // Exportar la aplicación
 export default app;

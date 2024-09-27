@@ -38,12 +38,12 @@ Pago.init({
             key: 'idmediopago'
         }
     },
-    idorigen: {
+    idcategoria: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'origenes',
-            key: 'idorigen'
+            model: 'categorias',
+            key: 'idcategoria'
         }
     },
     adjunto: {

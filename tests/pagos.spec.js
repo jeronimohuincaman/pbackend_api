@@ -31,10 +31,10 @@ describe("POST /pagos", () => {
                 descripcion: "Pago por servicios",
                 monto: 150.75,
                 fecha_hora: "2024-09-20T15:30:00Z",
-                idorigen: 1,
                 idtipo: 2,
                 idusuario: 6,
                 idmediopago: 4,
+                idcategoria: 1,
                 adjunto: "" // Aquí iría un PDF en base64 si existe
             });
 
@@ -61,7 +61,6 @@ describe("PUT /pagos/:idpago", () => {
                 descripcion: "Pago editado",
                 monto: 200.00,
                 fecha_hora: "2024-09-20T16:00:00Z",
-                idorigen: 1,
                 idtipo: 2,
                 idusuario: 6,
                 idmediopago: 4,

@@ -1,7 +1,11 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import config from '../../../core/config.js';
 import Pago from '../models/pago.js';
+import Movimiento, { TiposMovimiento } from '../../movimientos/models/movimiento.js';
 
 const router = express.Router();
 
@@ -20,17 +24,73 @@ router.get('/', async (req, res) => {
 // Crear un nuevo registro
 router.post('/', async (req, res) => {
     const { body } = req;
+    const { adjunto, fecha_hora } = body;
     try {
+
+        let filePath = null;
+        let fileLocation = null;
+
+        // Si el adjunto está presente
+        if (adjunto) {
+            // Convertir la cadena base64 en un buffer (datos binarios)
+            const buffer = Buffer.from(adjunto, 'base64');
+
+            // Obtener la ruta completa del archivo actual
+            const __filename = fileURLToPath(import.meta.url);
+
+            // Obtener la ruta del directorio actual
+            const currentDirectory = path.dirname(__filename);
+
+            // Definir la carpeta de destino para almacenar los archivos (en este caso, "uploads")
+            const uploadsDir = path.join(currentDirectory, '../../../uploads/pagos');
+
+            // Asegúrate de que la carpeta "uploads" exista, si no, créala
+            if (!fs.existsSync(uploadsDir)) {
+                fs.mkdirSync(uploadsDir);
+            }
+
+            // Crear un nombre único para el archivo en formato "pago_AAAA_MM_DD.pdf"
+            const date = new Date(fecha_hora);
+            const formattedDate = date.toISOString().split('T')[0].replace(/-/g, '_'); // AAAA_MM_DD
+            const time = date.toTimeString().split(' ')[0].replace(/:/g, '_'); // HH_MM_SS
+            const fileName = `pago_${formattedDate}_${time}.pdf`;
+
+            // Unir la ruta de la carpeta "uploads" con el nombre del archivo
+            filePath = path.join(uploadsDir, fileName);
+
+            // Escribir el archivo en la ubicación especificada
+            fs.writeFileSync(filePath, buffer);
+
+            fileLocation = `uploads/${fileName}`;
+        }
+
         const nuevoPago = await Pago.create({
             descripcion: body.descripcion,
             monto: body.monto,
             fecha_hora: body.fecha_hora,
-            idorigen: body.idorigen,
-            idtipo: body.idtipo,
             idusuario: body.idusuario,
             idmediopago: body.idmediopago,
-            adjunto: body.adjunto ? body.adjunto : null
+            idcategoria: body.idcategoria,
+            adjunto: fileLocation
         });
+
+        if (nuevoPago.save()) {
+            const nuevoMovimiento = await Movimiento.create({
+                fecha_hora: body.fecha_hora,
+                descripcion: body.descripcion,
+                idusuario: body.idusuario,
+                idcategoria: body.idcategoria,
+                monto: body.monto,
+                idmediopago: body.idmediopago,
+                idtipo: TiposMovimiento.EGRESO
+            });
+
+            if (!nuevoMovimiento.save()) {
+                const accessToken = jwt.sign({ data: 'error' }, config.secretKey, { expiresIn: '20m' });
+                res.status(500).json({ success: false, message: 'Error al crear movimiento de pago', token: accessToken });
+            }
+        }
+
         const accessToken = jwt.sign({ data: nuevoPago }, config.secretKey, { expiresIn: '20m' });
         res.status(201).json({ success: true, result: nuevoPago, message: 'Pagos creado con éxito', token: accessToken });
     } catch (error) {

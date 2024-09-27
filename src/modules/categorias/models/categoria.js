@@ -1,10 +1,10 @@
 import { Sequelize, DataTypes, Model } from 'sequelize';
 import sequelize from '../../../core/testConnection.js';
 
-class TipoDeMovimiento extends Model { }
+class Categoria extends Model { }
 
-TipoDeMovimiento.init({
-    idtipo: {
+Categoria.init({
+    idcategoria: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
@@ -19,8 +19,8 @@ TipoDeMovimiento.init({
     }
 }, {
     sequelize,
-    modelName: "TipoDeMovimiento",
-    tableName: "tipo_de_movimientos"
+    modelName: "Categoria",
+    tableName: "categorias"
 });
 
-export default TipoDeMovimiento;
+export default Categoria;

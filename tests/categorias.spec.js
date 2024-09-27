@@ -12,9 +12,9 @@ afterAll(async () => {
     await sequelize.close(); // Cierra la conexión después de los tests
 });
 
-describe("GET /tipo_de_movimientos", () => {
-    test("Obtener todos los tipo_de_movimientos", async () => {
-        const response = await request(app).get("/tipo_de_movimientos")
+describe("GET /categorias", () => {
+    test("Obtener todos los categorias", async () => {
+        const response = await request(app).get("/categorias")
             .set('Authorization', `Bearer ${process.env.AUTH_TOKEN}`) // Usar el token de la variable de entorno
             .send();
 

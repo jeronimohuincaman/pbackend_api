@@ -17,7 +17,7 @@ Usuario.init({
     user: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true
+        // unique: true
     },
     pass: {
         type: DataTypes.STRING,

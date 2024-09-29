@@ -66,6 +66,14 @@ Movimiento.init({
         type: DataTypes.FLOAT,
         allowNull: false
     },
+    idpago: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: 'pagos',
+            key: 'idpago'
+        }
+    }
 }, {
     sequelize,
     modelName: "Movimiento",

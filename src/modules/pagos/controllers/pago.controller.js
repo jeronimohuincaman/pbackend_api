@@ -216,7 +216,6 @@ function convertPdf(adjunto, fecha_hora) {
         fs.writeFileSync(filePath, buffer);
 
         fileLocation = `uploads/${fileName}`;
-        console.log(fileLocation)
     }
 
     return fileLocation;

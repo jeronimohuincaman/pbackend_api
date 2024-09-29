@@ -9,12 +9,33 @@ import Movimiento, { TiposMovimiento } from '../../movimientos/models/movimiento
 
 const router = express.Router();
 
-// Obtener todos los registros
+// Obtener todos los registros con paginación
 router.get('/', async (req, res) => {
+    const page = parseInt(req.query.page) || 1; // Página por defecto 1
+    const limit = parseInt(req.query.limit) || 10; // Límite por defecto 10
+    const offset = (page - 1) * limit; // Calcular el offset
+
     try {
-        const pagos = await Pago.findAll();
+        const { count, rows: pagos } = await Pago.findAndCountAll({
+            offset: offset,
+            limit: limit
+        });
+
+        const totalPages = Math.ceil(count / limit); // Calcular total de páginas
+
         const accessToken = jwt.sign({ data: pagos }, config.secretKey, { expiresIn: '20m' });
-        res.status(200).json({ success: true, result: pagos, message: 'Pagos obtenidos con éxito', token: accessToken });
+        res.status(200).json({
+            success: true,
+            result: pagos,
+            message: 'Pagos obtenidos con éxito',
+            token: accessToken,
+            pagination: {
+                totalItems: count,
+                totalPages: totalPages,
+                currentPage: page,
+                itemsPerPage: limit
+            }
+        });
     } catch (error) {
         const accessToken = jwt.sign({ data: 'error' }, config.secretKey, { expiresIn: '20m' });
         res.status(400).json({ success: false, message: 'Error al obtener pagos', token: accessToken });
@@ -184,40 +205,26 @@ function convertPdf(adjunto, fecha_hora) {
     let filePath = null;
     let fileLocation = null;
 
-    // Si el adjunto está presente
-    if (adjunto) {
-        // Convertir la cadena base64 en un buffer (datos binarios)
-        const buffer = Buffer.from(adjunto, 'base64');
-
-        // Obtener la ruta completa del archivo actual
+    // Si el adjunto no esta vacio
+    if (adjunto !== '') {
+        // Creamos la carpeta en caso de que no exista
         const __filename = fileURLToPath(import.meta.url);
+        const __dirname = path.dirname(__filename);
 
-        // Obtener la ruta del directorio actual
-        const currentDirectory = path.dirname(__filename);
-
-        // Definir la carpeta de destino para almacenar los archivos (en este caso, "uploads")
-        const uploadsDir = path.join(currentDirectory, '../../../uploads/pagos');
-
-        // Asegúrate de que la carpeta "uploads" exista, si no, créala
-        if (!fs.existsSync(uploadsDir)) {
-            fs.mkdirSync(uploadsDir);
+        filePath = path.join(__dirname, '../uploads/');
+        if (!fs.existsSync(filePath)) {
+            fs.mkdirSync(filePath, { recursive: true });
         }
 
-        // Crear un nombre único para el archivo en formato "pago_AAAA_MM_DD.pdf"
-        const date = new Date(fecha_hora);
-        const formattedDate = date.toISOString().split('T')[0].replace(/-/g, '_'); // AAAA_MM_DD
-        const time = date.toTimeString().split(' ')[0].replace(/:/g, '_'); // HH_MM_SS
-        const fileName = `pago_${formattedDate}_${time}.pdf`;
+        // Obtenemos la extensión del archivo
+        const ext = adjunto.substring("data:application/pdf;base64,".length, adjunto.indexOf('/'));
+        const fileName = 'adjunto-' + fecha_hora + '.' + ext;
+        fileLocation = path.join(filePath, fileName);
 
-        // Unir la ruta de la carpeta "uploads" con el nombre del archivo
-        filePath = path.join(uploadsDir, fileName);
-
-        // Escribir el archivo en la ubicación especificada
-        fs.writeFileSync(filePath, buffer);
-
-        fileLocation = `uploads/${fileName}`;
+        // Generamos el archivo pdf
+        const pdfBuffer = Buffer.from(adjunto.replace("data:application/pdf;base64,", ""), 'base64');
+        fs.writeFileSync(fileLocation, pdfBuffer);
     }
-
     return fileLocation;
 }
 

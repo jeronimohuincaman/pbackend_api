@@ -7,10 +7,22 @@ const router = express.Router();
 
 // Obtener registros
 router.get('/', async (req, res) => {
+    const { page = 1, limit = 10 } = req.query; // Parámetros de paginación desde la solicitud
+
     try {
-        const movimientos = await Movimiento.findAll();
+        // Calcular el offset
+        const offset = (page - 1) * limit;
+
+        // Consulta con paginación
+        const movimientos = await Movimiento.findAndCountAll({
+            limit: parseInt(limit),  // Límite de resultados por página
+            offset: parseInt(offset)  // Cuántos registros saltar
+        });
+
         const accessToken = jwt.sign({ data: movimientos }, config.secretKey, { expiresIn: '20m' });
-        res.status(200).json({ success: true, result: movimientos, message: 'Movimientos obtenidos con éxito', token: accessToken });
+        const pagination = { totalPages: Math.ceil(movimientos.count / limit), currentPage: parseInt(page), totalItems: movimientos.count };
+
+        res.status(200).json({ success: true, result: movimientos.rows, message: 'Movimientos obtenidos con éxito', token: accessToken, pagination: pagination });
     } catch (error) {
         const accessToken = jwt.sign({ data: 'error' }, config.secretKey, { expiresIn: '20m' });
         res.status(400).json({ success: false, result: "Movimientos", message: 'Error al obtener movimientos', token: accessToken });

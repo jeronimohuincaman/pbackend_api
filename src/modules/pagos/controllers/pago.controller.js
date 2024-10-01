@@ -47,6 +47,7 @@ router.post('/', async (req, res) => {
     const { body } = req;
     const { adjunto, fecha_hora } = body;
     try {
+
         let fileLocation = convertPdf(adjunto, fecha_hora);
 
         const nuevoPago = await Pago.create({
@@ -205,25 +206,44 @@ function convertPdf(adjunto, fecha_hora) {
     let filePath = null;
     let fileLocation = null;
 
-    // Si el adjunto no esta vacio
-    if (adjunto !== '') {
-        // Creamos la carpeta en caso de que no exista
-        const __filename = fileURLToPath(import.meta.url);
-        const __dirname = path.dirname(__filename);
+    try {
 
-        filePath = path.join(__dirname, '../uploads/');
-        if (!fs.existsSync(filePath)) {
-            fs.mkdirSync(filePath, { recursive: true });
+        // Si el adjunto está presente
+        if (adjunto) {
+            // Convertir la cadena base64 en un buffer (datos binarios)
+            const buffer = Buffer.from(adjunto, 'base64');
+
+            // Obtener la ruta completa del archivo actual
+            const __filename = fileURLToPath(import.meta.url);
+
+            // Obtener la ruta del directorio actual
+            const currentDirectory = path.dirname(__filename);
+
+            // Definir la carpeta de destino para almacenar los archivos (en este caso, "uploads")
+            const uploadsDir = path.join(currentDirectory, '../../../uploads/pagos');
+
+            // Asegúrate de que la carpeta "uploads" exista, si no, créala
+            if (!fs.existsSync(uploadsDir)) {
+                fs.mkdirSync(uploadsDir);
+            }
+
+            // Crear un nombre único para el archivo en formato "pago_AAAA_MM_DD.pdf"
+            const date = new Date(fecha_hora);
+            const formattedDate = date.toISOString().split('T')[0].replace(/-/g, '_'); // AAAA_MM_DD
+            const time = date.toTimeString().split(' ')[0].replace(/:/g, '_'); // HH_MM_SS
+            const fileName = `pago_${formattedDate}_${time}.pdf`;
+
+            // Unir la ruta de la carpeta "uploads" con el nombre del archivo
+            filePath = path.join(uploadsDir, fileName);
+
+            // Escribir el archivo en la ubicación especificada
+            fs.writeFileSync(filePath, buffer);
+
+            fileLocation = `uploads/${fileName}`;
         }
 
-        // Obtenemos la extensión del archivo
-        const ext = adjunto.substring("data:application/pdf;base64,".length, adjunto.indexOf('/'));
-        const fileName = 'adjunto-' + fecha_hora + '.' + ext;
-        fileLocation = path.join(filePath, fileName);
-
-        // Generamos el archivo pdf
-        const pdfBuffer = Buffer.from(adjunto.replace("data:application/pdf;base64,", ""), 'base64');
-        fs.writeFileSync(fileLocation, pdfBuffer);
+    } catch (error) {
+        console.log('Error al decodificar base64')
     }
     return fileLocation;
 }
